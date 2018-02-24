@@ -32,24 +32,32 @@ class Banner extends React.PureComponent {
     return (
       <div className="home-page-wrapper banner-wrapper banner" id="banner">
         <div className="masthead banner.text-center">
+          <h2>&nbsp;</h2>
           <h1>Acqusta TQuant</h1>
           <h2>&nbsp;</h2>
-          <h2>量化黑科技</h2>
-          <h2>&nbsp;</h2>
-          <h2>专注日内交易</h2>
+          <h2>量化黑科技&nbsp;&nbsp;宽客新起点</h2>
+          <h3>&nbsp;</h3>
           <div className="banner-btns" key="buttons">
             <Link className="banner-btn components" to={utils.getLocalizedPathname('/docs/manual/introduce', isZhCN)}>
               开始使用
             </Link>
-            <Link className="banner-btn language" to={utils.getLocalizedPathname('/docs/arch/introduce', isZhCN)}>
+            <a className="banner-btn language"
+             href='https://pan.baidu.com/s/1pNr9QVT'>
               下载
-            </Link>
+            </a>
           </div>
           <div>
             <a href="https://github.com/acqusta">GitHub开源社区</a>
           </div>
           <div>
-            <Link to="">微信：@tquant</Link>
+          </div>
+          <div>
+          <h3>&nbsp;</h3>
+          请微信联系获取免费帐号
+          <br/>
+          <Link to="">微信：@tquant</Link>
+          <br/>
+            <img width="150" src="/docs/tquant_weixin.jpg"></img>
           </div>
         </div>
       </div>

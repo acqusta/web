@@ -121,9 +121,9 @@ export default class Header extends React.Component {
           </Link>
         </Menu.Item>
         <Menu.Item key="docs/download">
-          <Link to='/docs/download/introduce'>
+          <a href='https://pan.baidu.com/s/1pNr9QVT'>
             下载
-          </Link>
+          </a>
         </Menu.Item>
       </Menu>,
     ];

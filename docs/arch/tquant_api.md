@@ -4,11 +4,9 @@ order: 8
 title: TQuantApi
 ---
 
-TQuantApi是TQuant的的标准API，包含行情和交易接口。源码开放，支持多种语言。支持C++, Pyhon, Java, Scala, JavaScript等编程语言。支持 Windows, Linux, OSX三种平台，在Mac上也可以进行交易和研究。
+TQuantApi是TQuant的的标准API，包含行情和交易接口。支持C++, Pyhon, Java, Scala, JavaScript等编程语言。支持 Windows, Linux, OSX三种平台，在Mac上也可以进行交易和研究。
 
-[github源码](https://github.com/acqusta/tqapi)
-
-[使用说明](manul)
+源码开发在github上。[github源码](https://github.com/acqusta/tqapi)
 
 ## 行情接口
 

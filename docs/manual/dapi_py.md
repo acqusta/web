@@ -6,17 +6,39 @@ title: DataApi-Python
 
 DataApi是个抽象的接口，用户需要从其他的接口中得到DataApi的实例。在不同的系统中，如回测平台、策略平台等，有不同的实现和创建方法，但是接口都会保持一致，方便用户平滑切换系统。
 
-如从TQuantApi中得到DataApi实例：
 
+## TQuantApi创建DataApi
+
+```Python
+class TQuantApi:
+    def __init__(self, addr): pass
+    def data_api(source=None): pass
+    def trade_api() : pass
+```
+
+通过data_api()的参数source可以选择使用云服务还是本地服务，缺省为云服务。
+
+source 取值
+
+- remote 云服务
+- local  本地服务
+
+例子：
 ```Python
 import tquant as tq
 
 tqapi = tq.TQuantApi('ipc://tqc_10001')
-dapi = tqapi.data_api()
-tapi = tqapi.trade_api()
+dapi_remote = tqapi.data_api()
+dapi_remote2 = tqapi.data_api('remote')
+dapi_local = tqapi.data_api('local')
 
 ```
 
+注意：
+
+1. 不管remote还是local，都是优先取本地的历史数据。当source是remote时，如果本地没有，则会从服务器上下载。
+1. 由于智能合并算法，实盘quote行情是local和remote的合并行情，因此两种模式下quote函数和推送行情是一样的。
+1. 实盘的分钟线、tick数据是区分 local 和 remote的。
 
 ## 接口原型
 
@@ -25,30 +47,22 @@ tapi = tqapi.trade_api()
 class DataApi:
     def set_on_quote(self, func): pass
     def set_on_bar(self, func): pass
-    def subscribe(self, codes, source=None) : pass
-    def unsubscribe(self, codes, source=None): pass
-    def quote(self, code, source=None): pass
-    def bar(self, code, cycle="1m", trading_day=0, align=True, source=None): pass
-    def daily_bar(self, code, price_adj="", align=True, source=None): pass
-    def tick(self, code, trading_day=0, source=None): pass
+    def subscribe(self, codes) : pass
+    def unsubscribe(self, codes): pass
+    def quote(self, code): pass
+    def bar(self, code, cycle="1m", trading_day=0, align=True): pass
+    def daily_bar(self, code, price_adj="", align=True): pass
+    def tick(self, code, trading_day=0): pass
 ```
-
-每个方法中都有source参数。该参数用于指定数据源。当tqc同时启用了本地服务和云服务，需要通过这个参数指定方法的目标数据源。
-取值：
-
-- remote 云服务
-- local  本地服务
 
 ## 取快照
 
 ```Python
-def quote(self, code, source=None):
-    return (quote, err_msg)
+def quote(self, code): pass
 ```
 
 参数
 - code    代码，只支持一个代码，例子: '000001.SH'。
-- source  数据源，缺省值: remote。
 
 返回值
 - quote   dict类型, 字段参考 [《DataApi概述》](docs/manual/dapi_intro)。
@@ -59,7 +73,7 @@ def quote(self, code, source=None):
 例子
 
 ```Python
-q, msg = dapi.bar('000001.SH', source='remote')
+q, msg = dapi.bar('000001.SH')
 ```
 
 > DataApi中没有字段标志是否停盘，可以通过以下几种方法粗略判断。
@@ -71,8 +85,7 @@ q, msg = dapi.bar('000001.SH', source='remote')
 ## 取日内K线（bar）
 
 ```Python
-def bar(self, code, cycle="1m", trading_day=0, align=True, source=None):
-    pass
+def bar(self, code, cycle="1m", trading_day=0, align=True): pass
 ```
 
 参数
@@ -80,7 +93,6 @@ def bar(self, code, cycle="1m", trading_day=0, align=True, source=None):
 - cycle   周期，字符串类型，目前只支持 1m - 1分钟线，计划支持15s, 30s等。
 - trading_day 交易日，数字类型。当值是0时，表示当前交易日。例子：20180301。
 - align   是否对齐，缺省对齐。
-- source  数据源，**除非指定数据源，缺省先读取本地历史数据，如果没有再从云服务器上下载**。
 
 返回值
 - bars   DataFrame类型, 字段参考 [《DataApi概述》](docs/manual/dapi_intro)。
@@ -109,8 +121,7 @@ def bar(self, code, cycle="1m", trading_day=0, align=True, source=None):
 ## 取日线
 
 ```Python
-def daily_bar(self, code, price_adj="", align=True, source=None):
-    pass
+def daily_bar(self, code, price_adj="", align=True): pass
 ```
 
 参数
@@ -121,7 +132,6 @@ def daily_bar(self, code, price_adj="", align=True, source=None):
 - align   是否对齐，缺省对齐。取值：
   - True  对齐，每个交易日都有一个bar，如果停盘，则以上个交易日的收盘价填充。
   - False 只有交易，才有bar。
-- source  数据源，**除非指定数据源，缺省先读取本地历史数据，如果没有再从云服务器上下载**。
 
 返回值
 - bars   DataFrame类型, 字段参考 [《DataApi概述》](docs/manual/dapi_intro)。
@@ -133,14 +143,12 @@ def daily_bar(self, code, price_adj="", align=True, source=None):
 ## 取tick
 
 ```Python
-def tick(self, code, trading_day=0, source=None):
-    pass
+def tick(self, code, trading_day=0): pass
 ```
 
 参数
 - code    代码，只支持一个代码，字符串类型。例子: '000001.SH'。
 - trading_day 交易日，数字类型。当值是0时，表示当前交易日。例子：20180301。
-- source  数据源，**除非指定数据源，缺省先读取本地历史数据，如果没有再从云服务器上下载**。
 
 返回值
 - ticks   DataFrame类型, 字段参考 [《DataApi概述》](docs/manual/dapi_intro)。
@@ -149,15 +157,13 @@ def tick(self, code, trading_day=0, source=None):
 ## 订阅行情
 
 ```Python
-def subscribe(self, codes, source=None) :
-    pass
+def subscribe(self, codes) : pass
 ```
 
 参数
 - codes    代码列表，支持字符串和数组两种格式。
   - 字符串类型，使用','隔开的多个代码，例子: '000001.SH,600000.SH'。
   - tuple或list  例子 ['000001.SH','600000.SH'] 或 ('000001.SH', '600000.SH')。
-- source  数据源，如果不指定，则为 remote。
 
 返回值
 - codes 已经订阅的列表，用','隔开的字符串。
@@ -175,15 +181,13 @@ def subscribe(self, codes, source=None) :
 ## 取消订阅
 
 ```Python
-def unsubscribe(self, codes, source=None):
-    pass
+def unsubscribe(self, codes): pass
 ```
 
 参数
 - codes    代码列表，支持字符串和数组两种格式。
   - 字符串类型，使用','隔开的多个代码，例子: '000001.SH,600000.SH'。
   - tuple或list  例子 ['000001.SH','600000.SH'] 或 ('000001.SH', '600000.SH')。
-- source  数据源，如果不指定，则为 remote。
 
 返回值
 - codes 已经订阅的列表，用','隔开的字符串。
@@ -200,10 +204,8 @@ def unsubscribe(self, codes, source=None):
 ## 行情推送回调方法
 
 ```Python
-def set_on_quote(self, func):
-    pass
-def set_on_bar(self, func):
-    pass
+def set_on_quote(self, func): pass
+def set_on_bar(self, func): pass
 ```
 
 推送数据包括快照和bar，要使用推送行情，可以设置行情推送回调函数，set_on_quote或set_on_bar。订阅行情后，

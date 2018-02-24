@@ -38,7 +38,7 @@ public class DataApiDemo {
     private DataApi dapi = null;
     DataApiDemo() throws Exception {
         api = new TQuantApi("ipc://tqc_10001");
-        dapi = api.getDataApi();
+        dapi = api.getDataApi("");
         ...
     }
 ```
@@ -205,16 +205,15 @@ public interface DataApi {
     }
 
     /**
-     * 取某交易日的某个代码的 ticks
+     * 取某交易日的某个代码的ticks
      *
      * tradingday 为0，表示当前交易日
      *
      * @param code
      * @param trading_day
-     * @param source
      * @return
      */
-    CallResult<MarketQuote[]> getTick(String code, int trading_day, String source);
+    CallResult<MarketQuote[]> getTick(String code, int trading_day);
 
     /**
      * 取某个代码的Bar
@@ -226,10 +225,9 @@ public interface DataApi {
      * @param cycle         "1m"
      * @param trading_day   交易日
      * @param align         是否对齐
-     * @param source
      * @return
      */
-    CallResult<Bar[]> getBar (String code, String cycle, int trading_day, Boolean align, String source);
+    CallResult<Bar[]> getBar (String code, String cycle, int trading_day, Boolean align);
 
     /**
      * 取某个代码的DailyBar
@@ -239,19 +237,17 @@ public interface DataApi {
      *                        back -- 后复权
      *                        forward -- 前复权
      * @param align         是否对齐
-     * @param source
      * @return
      */
-    CallResult<DailyBar[]> getDailyBar (String code, String price_adj, Boolean align, String source);
+    CallResult<DailyBar[]> getDailyBar (String code, String price_adj, Boolean align);
 
     /**
      * 取当前的行情快照
      *
      * @param code
-     * @param source
      * @return
      */
-    CallResult<MarketQuote> getQuote (String code, String source);
+    CallResult<MarketQuote> getQuote (String code);
 
     /**
      * 订阅行情
@@ -259,10 +255,9 @@ public interface DataApi {
      * codes为新增的订阅列表，返回所有已经订阅的代码,包括新增的列表。如果codes为空，可以返回已订阅列表。
      *
      * @param codes
-     * @param source
      * @return 所有已经订阅的代码
      */
-    CallResult<String[]> subscribe(String[] codes, String source);
+    CallResult<String[]> subscribe(String[] codes);
 
     /**
      * 取消订阅
@@ -271,10 +266,9 @@ public interface DataApi {
      * 如果需要取消所有订阅，先通过 subscribe 得到所有列表，然后使用unscribe取消
      *
      * @param codes
-     * @param source
      * @return
      */
-    CallResult<String[]> unsubscribe(String[] codes, String source);
+    CallResult<String[]> unsubscribe(String[] codes);
 
     /**
      * 设置推送行情的回调函数

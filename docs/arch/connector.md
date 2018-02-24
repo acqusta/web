@@ -4,7 +4,7 @@ order: 5
 title: 连接层
 ---
 
-连接层负责连接云服务和本地服务，提供TQuantApi接口服务。
+连接层负责连接云服务和本地服务，提供[TQuantApi](docs/arch/tquant_api)接口服务。
 
 连接层的服务程序为tqc(TQuant Connector)。主要功能为：
 
@@ -13,7 +13,7 @@ title: 连接层
 - 通过IPC给本机的用户程序提供服务
 - 合并云行情和本地行情
 
-tqc提供的服务使用[TQuantApi](docs/arch/tquant_api)访问，该API源码开放，保障用户的代码安全。
+用户程序通过IPC和tqc交互，API的源码开放，保障用户的策略代码安全。
 
 ## 各组件功能
 
@@ -34,12 +34,10 @@ tqc提供的服务使用[TQuantApi](docs/arch/tquant_api)访问，该API源码�
 
 - **MPRPC Server**
 提供API服务，包括DataApi、TradeApi等。支持远程socket访问或者本机IPC访问。
-> tqc缺省不启用网络RPC服务。VIP用户可以选择启用。
-
 
 
 ## MPRPC
 
-MPRPC是利用MsgPack的数据格式实现的RPC服务，支持多种通讯协议，包括IPC、Socket、WebSocket和ZeroMQ。客户端支持C++、Java、Python和JavaScript。
+MPRPC是自己实现的RPC框架，使用MsgPack打包数据，支持多种通讯协议，包括IPC、Socket、WebSocket和ZeroMQ。客户端支持C++、Java、Python和JavaScript。
 
-本机使用IPC通讯协议，可以得到最小的低延时RPC调用，进程间通讯时间损耗为0.02毫秒左右。与此比较，Socket方案在0.3毫秒左右。
+使用IPC通讯协议，可以得到最小的低延时RPC调用，一次交互的时间约为0.02毫秒。与此比较，Socket方案在0.3毫秒左右。
