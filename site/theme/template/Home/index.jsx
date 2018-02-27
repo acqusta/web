@@ -80,7 +80,7 @@ class Home extends React.Component {
     const { isMobile, intl } = this.context;
     const childProps = { ...this.props, isMobile, locale: intl.locale };
     return (
-      <DocumentTitle title='Acqusta TQuant'>
+      <DocumentTitle title='Acqusta TQuant - 快、稳、准，新一代量化交易框架'>
         <div className="main-wrapper">
           <Banner {...childProps} />
           <style dangerouslySetInnerHTML={{ __html: getStyle() }} />

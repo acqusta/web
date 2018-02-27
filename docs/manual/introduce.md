@@ -4,14 +4,14 @@ order: 0
 title: 文档列表
 ---
 
-TQuant准备了多种文档帮助你快速使用TQuant。先看下[《TQuant架构》](docs/arch/introduce)了解整体框架，然后通过《快速入门》开始实践。在使用过程中，随时参考各参考手册，手册中包括了每个函数的参数和使用注意项，也有编写插件等所需要的知识。
+TQuant准备了多种文档帮助你快速使用TQuant。先看下[《TQuant架构》](/docs/arch/introduce)了解整体框架，然后通过《快速入门》开始实践。在使用过程中，随时参考各参考手册，手册中包括了每个函数的参数和使用注意项，也有编写插件等所需要的知识。
 
 ## 教程
 
-- [tqc安装和配置](docs/manual/tqc)
+- [tqc安装和配置](/docs/manual/tqc)
 
 - TQuantApi教程
-  - 快速入门 ([Python](docs/manual/quickstart_py)、[Java]()、[C++]()、[JavaScript]())
+  - 快速入门 ([Python](/docs/manual/quickstart_py)、[Java](/docs/manual/quickstart_java)、[C++](/docs/manual/quickstart_cpp)、[JavaScript](/docs/manual/quickstart_js))
   - 实现双均线交易策略
   - TQuantApi编译
 
@@ -24,10 +24,10 @@ TQuant准备了多种文档帮助你快速使用TQuant。先看下[《TQuant架�
 
 ## 参考手册
 
-- [TQuant架构](docs/arch/introduce)
+- [TQuant架构](/docs/arch/introduce)
 - API手册
-  - [DataApi](docs/manual/dapi_intro)
-  - [TradeApi](docs/manual/tapi_intro)
+  - [DataApi](/docs/manual/dapi_intro)
+  - [TradeApi](/docs/manual/tapi_intro)
 
 - 二次开发
   - 接入新行情源
