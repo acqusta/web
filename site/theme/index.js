@@ -4,6 +4,7 @@ const path = require('path');
 const homeTmpl = './template/Home/index';
 const contentTmpl = './template/Content/index';
 const redirectTmpl = './template/Redirect';
+const registerImpl = './template/Register';
 
 function pickerGenerator(module) {
   const tester = new RegExp(`^docs/${module}`);
@@ -95,6 +96,10 @@ module.exports = {
     }, {
       path: 'docs/resource/:children',
       component: redirectTmpl,
-    }],
+    }, {
+      path: 'register',
+      component: registerImpl,
+    }
+    ],
   },
 };

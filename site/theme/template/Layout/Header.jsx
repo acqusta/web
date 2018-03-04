@@ -87,14 +87,8 @@ export default class Header extends React.Component {
     const {
       location, themeConfig,
     } = this.props;
-    // const docVersions = { ...themeConfig.docVersions, [antdVersion]: antdVersion };
-    // const versionOptions = Object.keys(docVersions)
-    //   .map(version => <Option value={docVersions[version]} key={version}>{version}</Option>);
     const module = location.pathname.replace(/(^\/|\/$)/g, '').split('/').slice(0, -1).join('/');
     let activeMenuItem = module || 'home';
-    // if (activeMenuItem === 'components' || location.pathname === 'changelog') {
-    //   activeMenuItem = 'docs/react';
-    //}
     const { locale } = this.context.intl;
     const isZhCN = locale === 'zh-CN';
 
@@ -103,7 +97,37 @@ export default class Header extends React.Component {
       navbar: true,
     });
 
-    const menu = [
+    const small_menu = [
+      <Menu className="menu-site" mode={menuMode} selectedKeys={[activeMenuItem]}>
+        <Menu.Item key="home">
+          <Link to='/'>
+            首页
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="docs/arch">
+          <Link to='/docs/arch/introduce'>
+            介绍
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="docs/doc">
+          <Link to='/docs/manual/introduce'>
+            文档
+          </Link>
+        </Menu.Item>
+        <Menu.Item key="docs/download">
+          <a href='https://pan.baidu.com/s/1pNr9QVT'>
+            下载
+          </a>
+        </Menu.Item>
+        <Menu.Item key="register">
+          <Link to='register'>
+            注册
+          </Link>
+        </Menu.Item>
+      </Menu>,
+    ];
+
+    const normal_menu = [
       <Menu className="menu-site" mode={menuMode} selectedKeys={[activeMenuItem]} id="nav" key="nav">
         <Menu.Item key="home">
           <Link to='/'>
@@ -127,7 +151,7 @@ export default class Header extends React.Component {
         </Menu.Item>
       </Menu>,
     ];
-
+    
     //const searchPlaceholder = locale === 'zh-CN' ? '在acqusta.com 中搜索' : 'Search in acqusta.com';
     const searchPlaceholder = '在acqusta.com中搜索';
     return (
@@ -136,7 +160,7 @@ export default class Header extends React.Component {
           <Popover
             overlayClassName="popover-menu"
             placement="bottomRight"
-            content={menu}
+            content={small_menu}
             trigger="click"
             visible={menuVisible}
             arrowPointAtCenter
@@ -156,12 +180,22 @@ export default class Header extends React.Component {
               <span><b>Acqusta TQuant</b></span>
             </Link>
           </Col>
-          <Col xxl={20} xl={19} lg={19} md={18} sm={0} xs={0}>
+
+          <Col xxl={18} xl={17} lg={17} md={16} sm={0} xs={0}>
+            {!isMobile && normal_menu}
+          </Col>
+          <Col xxl={2} xl={2} lg={2} md={2} sm={0} xs={0}>        
             {/* <div id="search-box">
               <Icon type="search" />
               <Input ref={ref => this.searchInput = ref} placeholder={searchPlaceholder} />
             </div> */}
-            {!isMobile && menu}
+            <Menu className="menu-site" mode={menuMode} id="nav_reg">
+              <Menu.Item key="register">
+                <Link to="register">
+                  <span>注册</span>
+                </Link>
+              </Menu.Item>
+            </Menu>
           </Col>
         </Row>
       </header>

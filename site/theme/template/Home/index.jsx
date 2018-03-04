@@ -5,19 +5,19 @@ import PropTypes from 'prop-types';
 import Banner from './Banner';
 function getStyle() {
   return `
-    .main-wrapper {
-      padding: 0;
-    }
-    #header {
-      background-color #0;
-      color: #fff;
-    }
+    // .main-wrapper {
+    //   padding: 0;
+    // }
+    // #header {
+    //   background-color #0;
+    //   color: #fff;
+    // }
 
-    .navbar {
-      font-family:"Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","WenQuanYi Micro Hei",sans-serif;
-      background-color: #000;
-      color: #fff;
-    }
+    // .navbar {
+    //   font-family:"Helvetica Neue",Helvetica,Arial,"Hiragino Sans GB","Hiragino Sans GB W3","WenQuanYi Micro Hei",sans-serif;
+    //   background-color: #000;
+    //   color: #fff;
+    // }
 
     // #header,
     // #header .ant-select-selection,
@@ -83,7 +83,7 @@ class Home extends React.Component {
       <DocumentTitle title='Acqusta TQuant - 快、稳、准，新一代量化交易框架'>
         <div className="main-wrapper">
           <Banner {...childProps} />
-          <style dangerouslySetInnerHTML={{ __html: getStyle() }} />
+          {/* <style dangerouslySetInnerHTML={{ __html: getStyle() }} /> */}
         </div>
       </DocumentTitle>
     );

@@ -6,7 +6,6 @@ import ScrollParallax from 'rc-scroll-anim/lib/ScrollParallax';
 import { Link } from 'bisheng/router';
 import { FormattedMessage } from 'react-intl';
 import GitHubButton from 'react-github-button';
-import BannerImage from './BannerImage';
 import * as utils from '../utils';
 import { Row, Col, Card, Menu, Icon } from 'antd';
 
@@ -35,7 +34,7 @@ class Banner extends React.PureComponent {
       <div>
       <Row>
         <div className="home-page-wrapper banner-wrapper banner" id="banner">
-          <div className="masthead banner.text-center">
+          <div className="banner.text-center">
             <h1>Acqusta TQuant</h1>
             <h2>&nbsp;</h2>
             <h2>量化黑科技&nbsp;&nbsp;宽客新起点</h2>
