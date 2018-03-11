@@ -67,7 +67,7 @@ class Banner extends React.PureComponent {
           <Card ><h3>Tick回测</h3><p>飞一般的速度</p></Card>
         </Col>
         <Col className="feature-box" xxl={7} xl={7} lg={7} md={7} sm={12} xs={24}>
-          <Card ><h3>极速交易</h3><p>股票期货交易不再是问题</p></Card>
+          <Card ><h3>极速交易</h3><p>股票、期货、基金交易，一个都不能少</p></Card>
         </Col>
         <Col className="feature-box" xxl={7} xl={7} lg={7} md={7} sm={12} xs={24}>
           <Card ><h3>分布式架构</h3><p>稳如磐石</p></Card>

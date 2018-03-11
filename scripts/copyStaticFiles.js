@@ -39,6 +39,7 @@ function findSync(startPath) {
 
 let fileNames=findSync('docs');
 fileNames.push('acqusta.png');
+fileNames.push('acqusta_icon.png');
 fileNames.push('baidu_verify_0GXlizjRMz.html');
 console.log("copy static files to _site")
 console.log(fileNames);
