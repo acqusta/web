@@ -14,7 +14,7 @@ TQuant准备了多种文档帮助你快速使用TQuant。先看下[《TQuant架�
 - TQuantApi教程
   - 快速入门 ([Python](/docs/manual/quickstart_py)、[Java](/docs/manual/quickstart_java)、[C++](/docs/manual/quickstart_cpp)、[JavaScript](/docs/manual/quickstart_js))
   - 实现双均线交易策略
-  - TQuantApi编译
+  - [TQuantApi编译](/docs/manual/tqapi_compile)
 
 - tqs教程
   - 编写第一个事件驱动策略
