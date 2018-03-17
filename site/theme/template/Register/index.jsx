@@ -46,7 +46,7 @@ class Register extends React.Component {
         <div className="regbox">
           <Row type="flex" justify="space-around" >
             <Col xxl={18} xl={18} lg={18} md={18} sm={20} xs={20}>            
-              <WrappedRegistrationForm ></WrappedRegistrationForm>
+              <WrappedRegistrationForm isMobile={isMobile}></WrappedRegistrationForm>
             </Col>
             <Col xxl={6} xl={6} lg={6} md={6} sm={24} xs={24}>
               <div>

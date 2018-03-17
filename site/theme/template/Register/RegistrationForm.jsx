@@ -214,6 +214,7 @@ class RegistrationForm extends React.Component {
   render() {
     const { getFieldDecorator } = this.props.form;
     const { autoCompleteResult } = this.state;
+    const { isMobile } = this.props;
 
     const formItemLayout = {
       labelCol: {
@@ -250,10 +251,17 @@ class RegistrationForm extends React.Component {
     return (
       <Form onSubmit={this.handleSubmit}>
         <FormItem>
-          <div style={{ textAlign: 'center' }}>
-            <h2>请使用手机号码注册tqc客户端的账号</h2>
-            <h3>手机号码是tqc客户端的用户名，注意登陆时不需要输入 +86</h3>
-          </div>
+          {!isMobile? (
+            <div style={{ textAlign: 'center' }}>
+              <h2>请使用手机号码注册tqc客户端的账号</h2>
+              <h3>手机号码是tqc客户端的用户名，注意登陆时不需要输入 +86</h3>
+            </div>
+          ) : (
+            <div style={{ textAlign: 'left' }}>
+              <h3>请使用手机号码注册tqc客户端的账号。手机号码是tqc客户端的用户名，注意登陆时不需要输入 +86</h3>
+            </div>
+          )
+          }
         </FormItem>
 
         <FormItem
