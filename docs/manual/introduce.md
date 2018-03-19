@@ -8,7 +8,7 @@ TQuant准备了多种文档帮助你快速使用TQuant。先看下[《TQuant架�
 
 ## 教程
 - [TQuant架构](/docs/arch/introduce)
-- [版本比较](docs/manual/versions)
+- [版本比较](/docs/manual/versions)
 - [tqc安装和配置](/docs/manual/tqc)
 
 - TQuantApi教程
