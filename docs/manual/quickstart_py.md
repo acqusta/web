@@ -11,7 +11,7 @@ title: 快速入门-Python
 先使用pip安装TQuanApi。TQuantApi依赖pandas，如果没有安装，请一并安装。
 
 ```shell
-$ pip install tquant pandas
+$ pip install tquant pandas numpy
 ```
 
 也可以从github上下载代码，自己编译安装。
