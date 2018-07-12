@@ -9,7 +9,8 @@ TQuant准备了多种文档帮助你快速使用TQuant。先看下[《TQuant架�
 ## 教程
 - [TQuant架构](/docs/arch/introduce)
 - [版本比较](/docs/manual/versions)
-- [tqc安装和配置](/docs/manual/tqc)
+- [tqlocal安装和配置](/docs/manual/tqlocal)
+- [tqc配置](/docs/manual/tqc)
 
 - TQuantApi教程
   - 快速入门 ([Python](/docs/manual/quickstart_py)、[Java](/docs/manual/quickstart_java)、[C++](/docs/manual/quickstart_cpp)、[JavaScript](/docs/manual/quickstart_js))

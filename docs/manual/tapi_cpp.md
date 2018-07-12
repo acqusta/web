@@ -30,7 +30,7 @@ namespace tquant {  namespace api {
 
         Balance() : init_balance(0.0), enable_balance(0.0), margin(0.0)
             , float_pnl(0.0), close_pnl(0.0)
-        {}
+        {}            
     };
 
     //struct OrderStatus {
@@ -43,7 +43,7 @@ namespace tquant {  namespace api {
 
     //class EntrustAction {
 #define EA_Buy             "Buy"
-#define EA_Short           "Sell"
+#define EA_Short           "Short"
 #define EA_Cover           "Cover"
 #define EA_Sell            "Sell"
 #define EA_CoverToday      "CoverToday"
@@ -68,7 +68,7 @@ namespace tquant {  namespace api {
         string  status_msg;       // 状态消息
         int32_t order_id;         // 自定义订单编号
 
-        Order()
+        Order() 
             : entrust_price(0.0), entrust_size(0), entrust_date(0), entrust_time(0)
             , fill_price(0.0), fill_size(0), order_id(0)
         {}
@@ -85,14 +85,15 @@ namespace tquant {  namespace api {
         double  fill_price;       // 成交价格
         int32_t fill_date;        // 成交日期
         int32_t fill_time;        // 成交时间
+        int32_t order_id;         // 自定义订单编号
 
-        Trade() : fill_size(0), fill_price(0.0), fill_date(0), fill_time(0)
+        Trade() : fill_size(0), fill_price(0.0), fill_date(0), fill_time(0), order_id(0)
         {}
     };
 
     // Side {
 #define SD_Long "Long"
-#define D_Short "Short"
+#define SD_Short "Short"
     //}
 
     struct Position {
@@ -128,23 +129,24 @@ namespace tquant {  namespace api {
 
     class TradeApi_Callback{
     public:
+        virtual ~TradeApi_Callback() { }
         virtual void on_order_status  (shared_ptr<Order> order) = 0;
         virtual void on_order_trade   (shared_ptr<Trade> trade) = 0;
         virtual void on_account_status(shared_ptr<AccountInfo> account) = 0;
     };
 
     class TradeApi {
-    protected:
-        virtual ~TradeApi() {}
     public:
         TradeApi() { }
+
+        virtual ~TradeApi() {}
 
         /**
         * 查询帐号连接状态。
         *
         * @return
         */
-        virtual CallResult<vector<AccountInfo>> query_account_status() = 0;
+        virtual CallResult<const vector<AccountInfo>> query_account_status() = 0;
 
         /**
         * 查询某个帐号的资金使用情况
@@ -152,7 +154,7 @@ namespace tquant {  namespace api {
         * @param account_id
         * @return
         */
-        virtual CallResult<Balance> query_balance(const char* account_id) = 0;
+        virtual CallResult<const Balance> query_balance(const string& account_id) = 0;
 
         /**
         * 查询某个帐号的当天的订单
@@ -160,7 +162,7 @@ namespace tquant {  namespace api {
         * @param account_id
         * @return
         */
-        virtual CallResult<vector<Order>> query_orders(const char* account_id) = 0;
+        virtual CallResult<const vector<Order>> query_orders(const string& account_id) = 0;
 
         /**
         * 查询某个帐号的当天的成交
@@ -168,7 +170,7 @@ namespace tquant {  namespace api {
         * @param account_id
         * @return
         */
-        virtual CallResult<vector<Trade>> query_trades(const char* account_id) = 0;
+        virtual CallResult<const vector<Trade>> query_trades(const string& account_id) = 0;
 
         /**
         * 查询某个帐号的当天的持仓
@@ -176,7 +178,7 @@ namespace tquant {  namespace api {
         * @param account_id
         * @return
         */
-        virtual CallResult<vector<Position>> query_positions(const char* account_id) = 0;
+        virtual CallResult<const vector<Position>> query_positions(const string& account_id) = 0;
 
         /**
         * 下单
@@ -195,7 +197,7 @@ namespace tquant {  namespace api {
         * @param order_id      自定义订单编号，不为0表示有值
         * @return OrderID      订单ID
         */
-        virtual CallResult<OrderID> place_order(const char* account_id, const char* code, double price, int64_t size, const char* action, int order_id) = 0;
+        virtual CallResult<const OrderID> place_order(const string& account_id, const string& code, double price, int64_t size, const string& action, int order_id) = 0;
 
         /**
         * 根据订单号撤单
@@ -207,7 +209,7 @@ namespace tquant {  namespace api {
         * @param order_id      订单号
         * @return 是否成功
         */
-        virtual CallResult<bool> cancel_order(const char* account_id, const char* code, int order_id) = 0;
+        virtual CallResult<bool> cancel_order(const string& account_id, const string& code, int order_id) = 0;
 
         /**
         * 根据委托号撤单
@@ -219,7 +221,7 @@ namespace tquant {  namespace api {
         * @param entrust_no    委托编号
         * @return 是否成功
         */
-        virtual CallResult<bool> cancel_order(const char* account_id, const char* code, const char* entrust_no) = 0;
+        virtual CallResult<bool> cancel_order(const string& account_id, const string& code, const string& entrust_no) = 0;
 
         /**
         * 通用查询接口
@@ -232,13 +234,14 @@ namespace tquant {  namespace api {
         * @param params
         * @return
         */
-        virtual CallResult<string> query(const char* account_id, const char* command, const char* params) = 0;
+        virtual CallResult<string> query(const string& account_id, const string& command, const string& params) = 0;
+        
         /**
         * 设置 TradeApi.Callback
         *
         * @param callback
         */
-        virtual void set_callback(TradeApi_Callback* callback) = 0;
+        virtual TradeApi_Callback* set_callback(TradeApi_Callback* callback) = 0;
     };
 } }
 ```

@@ -34,8 +34,23 @@ ubuntu 16.04编译过程
 
 #include "tquant_api.h"
 
-TQuantApi* api = TQuantApi::create("ipc://tqc_10001");
-DataApi* dapi = api->data_api()
+using namespace tquant::api;
+
+DataApi* api = create_data_api("ipc://tqc_10001");
+
+```
+
+或者使用本地行情服务
+
+```cpp
+
+#include "tquant_api.h"
+
+using namespace tquant::api;
+
+set_params("plugin_path", "D:\\tquant\\tqlocal\\bin")
+DataApi* dapi = create_data_api("mdapi://file://d:/tquant/tqlocal")
+
 ```
 
 ## 返回值处理方法
@@ -60,14 +75,14 @@ if (r.value) {
 ```cpp
 class MyCallback : public DataApi_Callback {
 public:
-    virtual void on_market_quote(shared_ptr<MarketQuote> q) override
+    virtual void on_market_quote(shared_ptr<const MarketQuote> q) override
     {
         cout << "onQuote: " << q->code << "," << q->date << "," << q->time << ","
              << q->open << "," << q->high << "," << q->low << "," << q->close << ","
              << q->volume << "," << q->turnover << "," << q->oi << endl;
     }
 
-    virtual void on_bar(const char* cycle, shared_ptr<Bar> bar) override
+    virtual void on_bar(const char* cycle, shared_ptr<const Bar> bar) override
     {
         cout << "on_bar: " << cycle<< "," << bar->code << "," << bar->date << "," << bar->time << ","
             << bar->open << "," << bar->high << "," << bar->low << "," << bar->close << ","
@@ -77,7 +92,7 @@ public:
 
 MyCallback callback;
 
-dapi.setCallback(&callback);
+dapi.set_callback(&callback);
 
 ```
 
@@ -106,6 +121,121 @@ namespace tquant {  namespace api {
                 this->_code = t.code;
                 this->code = this->_code.c_str();
             }
+        }
+    };
+
+    template<typename T> 
+    class TickDataHolder : public T {
+        string _code;
+    public:
+        TickDataHolder() {
+            std::memset(this, 0, sizeof(T));
+        }
+
+        TickDataHolder(const T& t, const string& a_code) : T(t), _code(a_code) {
+            this->code = _code.c_str();
+        }
+
+        TickDataHolder(const T& t) : T(t), _code(t.code) {
+            this->code = _code.c_str();
+        }
+
+        TickDataHolder(const TickDataHolder<T>& t) {
+            *this = t;
+            if (t.code){
+                this->_code = t.code;
+                this->code = this->_code.c_str();
+            }
+        }
+
+        void assign(const T& t, const char* code = nullptr) {
+            *(T*)this = t;
+            if (code) {
+                _code = code;
+                this->code = _code.c_str();
+            }
+        }
+
+        void set_code(const string& a_code) {
+            _code = a_code;
+            this->_code = _code.c_str();
+        }
+    };
+
+    struct TickArray {
+        TickArray(size_t type_size, size_t max_size)
+            : _data(nullptr)
+            , _type_size((int)type_size)
+            , _size(0)
+        {
+            if (max_size)
+                _data = new uint8_t[type_size* max_size];
+        }
+
+        TickArray()
+            : _data(nullptr)
+            , _type_size(0)
+        {}
+
+        ~TickArray() {
+            if (_data)
+                delete[] _data;
+        }
+
+        const uint8_t*  data() const        { return _data; }
+        size_t          type_size() const   { return _type_size; }
+        size_t          size() const        { return _size; }
+        const string&   code() const        { return _code; }
+
+        void set_code(const string& code)   { _code = code; }
+
+        // Be careful!
+        void set_size(int size) { _size = size; }
+
+        void assign(const char* code, uint8_t* data, int type_size, int size) {
+            if (this->_data) delete[] this->_data;
+            this->_data      = data;
+            this->_type_size = type_size;
+            this->_size      = size;
+            this->_code      = code;
+
+            uint8_t* p = this->_data;
+            for (int i = 0; i < _size; i++) {
+                *((const char**)p) = _code.c_str();
+                p += _type_size;
+            }
+        }
+    protected:
+        uint8_t*    _data;
+        int         _type_size;
+        int         _size;
+        string      _code;
+    };
+
+    template <class T>
+    struct _TickArray : public TickArray {
+
+        _TickArray(const string& code, size_t max_size)
+            : TickArray(sizeof(T), max_size)
+        {
+            set_code(code);
+        }
+
+        T& operator[] (size_t i) const {
+            if (i < this->_size)
+                return *reinterpret_cast<T*>(_data + _type_size*i);
+            else
+                throw std::runtime_error("wrong index");
+        }
+        T&  at(size_t i) const {
+            return *reinterpret_cast<T*>(_data + _type_size*i);
+        }
+
+        void push_back(const T& t) {
+            auto t2 = reinterpret_cast<T*>(_data + _type_size * _size);
+            *t2 = t;
+            t2->code = _code.c_str();
+            _size++;
         }
     };
 
@@ -200,10 +330,16 @@ namespace tquant {  namespace api {
 
 #pragma pack()
 
+    typedef _TickArray<RawMarketQuote> MarketQuoteArray;
+    typedef _TickArray<RawBar>         BarArray;
+    typedef _TickArray<RawDailyBar>    DailyBarArray;
+
     class DataApi {
-    protected:
-        virtual ~DataApi() {}
     public:
+        DataApi() {}
+
+        virtual ~DataApi() {}
+
         /**
         * 取某交易日的某个代码的 ticks
         *
@@ -213,7 +349,7 @@ namespace tquant {  namespace api {
         * @param trading_day
         * @return
         */
-        virtual CallResult<vector<MarketQuote>> tick(const char* code, int trading_day) = 0;
+        virtual CallResult<const MarketQuoteArray> tick(const string& code, int trading_day) = 0;
 
         /**
         * 取某个代码的Bar
@@ -227,7 +363,7 @@ namespace tquant {  namespace api {
         * @param align         是否对齐
         * @return
         */
-        virtual CallResult<vector<Bar>> bar(const char* code, const char* cycle, int trading_day, bool align) = 0;
+        virtual CallResult<const BarArray> bar(const string& code, const string& cycle, int trading_day, bool align) = 0;
 
         /**
         * 取某个代码的日线
@@ -240,7 +376,7 @@ namespace tquant {  namespace api {
         * @param align         是否对齐
         * @return
         */
-        virtual CallResult<vector<DailyBar>> daily_bar(const char* code, const char* price_adj, bool align) = 0;
+        virtual CallResult<const DailyBarArray> daily_bar(const string& code, const string& price_adj, bool align) = 0;
 
         /**
         * 取当前的行情快照
@@ -248,7 +384,7 @@ namespace tquant {  namespace api {
         * @param code
         * @return
         */
-        virtual CallResult<MarketQuote> quote(const char* code) = 0;
+        virtual CallResult<const MarketQuote> quote(const string& code) = 0;
 
         /**
         * 订阅行情
@@ -258,7 +394,7 @@ namespace tquant {  namespace api {
         * @param codes
         * @return 所有已经订阅的代码
         */
-        virtual CallResult<vector<string>> subscribe(const vector<string>& codes) = 0;
+        virtual CallResult<const vector<string>> subscribe(const vector<string>& codes) = 0;
 
         /**
         * 取消订阅
@@ -269,7 +405,7 @@ namespace tquant {  namespace api {
         * @param codes
         * @return
         */
-        virtual CallResult<vector<string>> unsubscribe(const vector<string>& codes) = 0;
+        virtual CallResult<const vector<string>> unsubscribe(const vector<string>& codes) = 0;
 
         /**
         * 设置推送行情的回调函数
@@ -278,7 +414,7 @@ namespace tquant {  namespace api {
         *
         * @param callback
         */
-        virtual void set_callback(DataApi_Callback* callback) = 0;
+        virtual DataApi_Callback* set_callback(DataApi_Callback* callback) = 0;
     };
 
 } }

@@ -34,11 +34,9 @@ import com.acqusta.tquant.api.DataApi;
 import com.acqusta.tquant.api.DataApi.*;
 
 public class DataApiDemo {
-    private TQuantApi api = null;
     private DataApi dapi = null;
     DataApiDemo() throws Exception {
-        api = new TQuantApi("ipc://tqc_10001");
-        dapi = api.getDataApi("");
+        dapi = new TQuantApi.createDataApi("ipc://tqc_10001");
         ...
     }
 ```

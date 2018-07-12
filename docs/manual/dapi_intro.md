@@ -4,7 +4,7 @@ order: 10
 title: DataApi-概述
 ---
 
-DataApi是TQuant的核心接口之一。它包括行情查询、订阅和推送接口。支持C++、Python、Java/Scala和JavaScript。
+DataApi是TQuant的核心接口之一。它包括行情查询、订阅和推送接口。支持C++、Python、Java/Scala、C#和JavaScript。
 
 DataApi具有如下特点：
 

@@ -85,7 +85,7 @@ class Banner extends React.PureComponent {
           <Card ><h3>分布式架构</h3><p>稳如磐石</p></Card>
         </Col>
         <Col className="feature-box"  xxl={7} xl={7} lg={7} md={7} sm={12} xs={24}>
-          <Card ><h3>多编程语言</h3><p>Python, Java, JavaScript, C++,...</p></Card>
+          <Card ><h3>多编程语言</h3><p>Python, Java, C#, JavaScript, C++,...</p></Card>
         </Col>
       </Row>
       </div>

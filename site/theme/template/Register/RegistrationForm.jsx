@@ -253,7 +253,8 @@ class RegistrationForm extends React.Component {
         <FormItem>
           {!isMobile? (
             <div style={{ textAlign: 'center' }}>
-              <h2>请使用手机号码注册tqc客户端的账号</h2>
+              <h2>只使用本地服务无需注册</h2>
+              <h2>使用云服务，请使用手机号码注册</h2>
               <h3>手机号码是tqc客户端的用户名，注意登陆时不需要输入 +86</h3>
             </div>
           ) : (

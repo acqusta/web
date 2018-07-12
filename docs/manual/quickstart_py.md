@@ -27,20 +27,33 @@ $ python setup.py install
 
 ## 初始化
 1. 引入tquant的package。
-1. 创建TQuantApi实例tqapi。
-1. 从tqapi中得到data_api和trade_api。
+1. 使用服务器地址创建DataApi和TradeApi
+
+### 连接tqc服务
 
 ```python
 import tquant as tq
 
-tqapi = tq.TQuantApi('ipc://tqc_10001')
-dapi = tqapi.data_api()
-tapi = tqapi.trade_api()
+dapi = tq.DataApi('ipc://tqc_10001')
+tapi = tq.TradeApi('ipc://tqc_10001')
 ```
 
-tq.TQuantApi的第一个参数是服务器的地址，ipc://tqc_10001表示使用本机的IPC服务。如果想使用TCP服务的话，使用参数 tcp://127.0.0.1:10001。
+tqc在本机通过IPCj机制（共享内存和信号量）提供服务，缺省地址为 ipc://tqc_10001，可以通过修改etc/tqc.conf修改。
 
-> IPC通信比TCP快，在行情推送上有优势，缺点是只能在本机使用。
+### 连接本地行情服务器
+
+假设tqlocal安装在d:\tquant\tqlocal目录。
+
+```python
+import tquant as tq
+
+tq.set_params("plugin_path", "D:\\tquant\\tqlocal\\bin")
+
+dapi = tq.DataApi('mdapi://file://d:/tquant/tqlocal')
+tapi = tq.TradeApi('tradeapi://tcp://127.0.0.1:10202')
+```
+
+在运行以下代码前，请先检查本地的行情服务和交易服务运行情况。
 
 ## 函数返回值
 

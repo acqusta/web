@@ -7,38 +7,36 @@ title: DataApi-Python
 DataApi是个抽象的接口，用户需要从其他的接口中得到DataApi的实例。在不同的系统中，如回测平台、策略平台等，有不同的实现和创建方法，但是接口都会保持一致，方便用户平滑切换系统。
 
 
-## TQuantApi创建DataApi
+## 创建DataApi
 
 ```Python
-class TQuantApi:
+class DataApi:
     def __init__(self, addr): pass
-    def data_api(source=None): pass
-    def trade_api() : pass
+    ...
 ```
 
-通过data_api()的参数source可以选择使用云服务还是本地服务，缺省为云服务。
+参数addr可以选择使用云服务还是本地服务，取值如下
+云服务(tqc):
+  addr='ipc://tqc_10001'
 
-source 取值
+本地行情服务：
+  addr='mdapi://file://d:/tquant/tqlocal'
 
-- remote 云服务
-- local  本地服务
+本地服务是通过 tqapi_mdapi.dll获取数据，速度比云服务更快。tqapi通过参数 plugin_path找tqapi_mdapi.dll。
+
 
 例子：
 ```Python
 import tquant as tq
 
-tqapi = tq.TQuantApi('ipc://tqc_10001')
-dapi_remote = tqapi.data_api()
-dapi_remote2 = tqapi.data_api('remote')
-dapi_local = tqapi.data_api('local')
+# 连接云服务
+dapi = tq.DataApi('ipc://tqc_10001')
+
+# 连接本地服务
+tq.set_params("plugin_path", "D:\\tquant\\tqlocal\\bin")
+dapi = tq.DataApi('mdapi://file://d:/tquant/tqlocal')
 
 ```
-
-注意：
-
-1. 不管remote还是local，都是优先取本地的历史数据。当source是remote时，如果本地没有，则会从服务器上下载。
-1. 由于智能合并算法，实盘quote行情是local和remote的合并行情，因此两种模式下quote函数和推送行情是一样的。
-1. 实盘的分钟线、tick数据是区分 local 和 remote的。
 
 ## 接口原型
 
