@@ -114,7 +114,8 @@ export default class Header extends React.Component {
             文档
           </Link>
         </Menu.Item>
-        <Menu.Item key="docs/download">
+        
+        {/* <Menu.Item key="docs/download">
           <a href='https://pan.baidu.com/s/1pNr9QVT'>
             下载
           </a>
@@ -123,7 +124,7 @@ export default class Header extends React.Component {
           <Link to='register'>
             注册
           </Link>
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu>,
     ];
 
@@ -144,11 +145,11 @@ export default class Header extends React.Component {
             文档
           </Link>
         </Menu.Item>
-        <Menu.Item key="docs/download">
+        {/* <Menu.Item key="docs/download">
           <a href='https://pan.baidu.com/s/1pNr9QVT'>
             下载
           </a>
-        </Menu.Item>
+        </Menu.Item> */}
       </Menu>,
     ];
     
@@ -189,13 +190,13 @@ export default class Header extends React.Component {
               <Icon type="search" />
               <Input ref={ref => this.searchInput = ref} placeholder={searchPlaceholder} />
             </div> */}
-            <Menu className="menu-site" mode={menuMode} id="nav_reg">
+            {/* <Menu className="menu-site" mode={menuMode} id="nav_reg">
               <Menu.Item key="register">
                 <Link to="register">
                   <span>注册</span>
                 </Link>
               </Menu.Item>
-            </Menu>
+            </Menu> */}
           </Col>
         </Row>
       </header>

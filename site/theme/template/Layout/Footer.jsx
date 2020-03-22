@@ -24,8 +24,8 @@ class Footer extends React.Component {
           <Row>
             <Col>
               <ul className="list-inline footer-center text-center">
-                <li>©2018 www.acqusta.com</li>
-                <li>沪ICP备17051960号-1</li>
+                <li>©2020 www.acqusta.com</li>
+                <li><a href="http://www.beian.miit.gov.cn">沪ICP备17051960号-1</a></li>
               </ul>
             </Col>
           </Row>

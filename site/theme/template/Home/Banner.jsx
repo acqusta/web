@@ -55,14 +55,13 @@ class Banner extends React.PureComponent {
               <Link className="banner-btn components" to={utils.getLocalizedPathname('/docs/manual/introduce', isZhCN)}>
                 开始使用
               </Link>
-              <a className="banner-btn components"
-              href='https://pan.baidu.com/s/1pNr9QVT'>
-                下载
-              </a>
             </div>
             <h3>&nbsp;</h3>
             <div>
-              <a className="link components" href="https://github.com/acqusta">GitHub开源社区</a>
+              <a className="link components" href="">下载 &nbsp;https://pan.baidu.com/s/1pNr9QVT</a>
+            </div>
+            <div>
+              <a className="link components" href="">GitHub开源社区 &nbsp;https://github.com/acqusta</a>
               <h2>&nbsp;</h2>
             </div>
           </div>
